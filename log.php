@@ -5,7 +5,9 @@ $password= $_POST["password"];
 $exist=0;
 $insert = "SELECT * FROM patient where  Phone='$name' AND Password='$password'";
 $insert1 = "SELECT * FROM doctor where  Phone='$name' AND Password='$password'";
-$insert2="SELECT * FROM patient"; // to know the no of current users to provide to admin for notification
+$insert2="SELECT * FROM patient"; 
+$insert3="UPDATE patient SET Doctor = NULL, Time = NULL,Slot=NULL WHERE FirstName = ";
+// to know the no of current users to provide to admin for notification
 $ins = mysqli_query($conn, $insert);/* to check if user exist*/
 $admin=0;
 $ins1 = mysqli_query($conn, $insert1);/* to check if admin exist*/
@@ -29,7 +31,7 @@ $user=mysqli_query($conn,$insert2);
 <a  href="index.php"> <img src="images/home.png" height=50px width=50px></a>
 
 
-				<button class="button login__submit">
+				<a class="button login__submit">
 					<span class="button__text">
 <?php
 	if(mysqli_num_rows($ins)>0&&mysqli_num_rows($ins1)>0)
@@ -51,10 +53,8 @@ $user=mysqli_query($conn,$insert2);
 		if(mysqli_num_rows($ins1)>0)
 		{
 		$row=mysqli_fetch_assoc($ins1);/* check for admin and redirect */ 
-		try{/*
-		    header('Location:logA.php?name='.$row['Name']);		
-		*/
-		    echo "<script>window.location.href='logD.php?name=".$row['Name']."';</script>";
+		try{
+			echo "<script>window.location.href='logD.php?name=".$row['FirstName']."';</script>";
 		}
 		catch(Exception $e){echo "<script>window.location.href='logD.php?name=".$row['Name']."';</script>";}
 		}
@@ -68,19 +68,31 @@ $user=mysqli_query($conn,$insert2);
 
 </span>
 					<i class="button__icon fas fa-chevron-right"></i>
-				</button>
+				</a>
 <?php 
+if ($row['Doctor']=="0"){
+	echo "<div class='button login__submit'>
+					<span class='button__text'><H1>Slot Cancled </h1>by the admin due to some reason</span>
+					<i class='button__icon fas fa-chevron-right'></i>
+				</div><a onclick='book.submit()' class='button login__submit'>
+					<span class='button__text'>&nbsp;&nbsp;RE-Book a new Slot Now</span>
+					<i class='button__icon fas fa-chevron-right'></i>
+				</a>";
+				$insert3=$insert3.'\''.$row["FirstName"].'\'';
+				 mysqli_query($conn, $insert3);
+}
+else
 if ($row['Slot']==""||$row["Time"]==""||$row['Slot']==null||$row["Time"]==null){
 	if ($exist==1)echo "<a onclick='book.submit()' class='button login__submit'>
 					<span class='button__text'>Book Slot Now</span>
 					<i class='button__icon fas fa-chevron-right'></i>
 				</a>	";}
 else echo "<div class='button login__submit'>
-					<span class='button__text'><H1>Slot Booked Already </h1><br>On: ".$row['Slot'].", At : ".$row["Time"]."</span>
+					<span class='button__text'><H1>Slot Booked Already </h1><br>dr.&nbsp;&nbsp;".$row['Doctor']."<br>On: ".$row['Slot'].", At : ".$row["Time"]."</span>
 					<i class='button__icon fas fa-chevron-right'></i>
 				</div>
 <a onclick='book.submit()' class='button login__submit'>
-					<span class='button__text'>Click Here To Change Time </span>
+					<span class='button__text'>Click to Change Booking </span>
 					<i class='button__icon fas fa-chevron-right'></i>
 				</a>";
 

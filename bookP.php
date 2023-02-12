@@ -3,7 +3,8 @@ include "conn.php";
 $number= $_POST["shown"];
 $date= $_POST["showd"];
 $time= $_POST["showt"];
-$getTime = "UPDATE patient SET Slot='$date',Time='$time' where  Phone='$number'";
+$doctor=$_POST['doctor'];
+$getTime = "UPDATE patient SET Doctor='$doctor',Slot='$date',Time='$time' where  Phone='$number'";
 ?>
 <head>
 <link rel="stylesheet" href="css/main.css">
@@ -16,13 +17,13 @@ $getTime = "UPDATE patient SET Slot='$date',Time='$time' where  Phone='$number'"
 			<form class="login" methord="post">
 				<a  href="index.php"> <img src="images/home.png" height=50px width=50px></a>
 
-				<a style="text-decoration: none;" href="register.php" class="button login__submit">
+				<a style="text-decoration: none;" onclick='history.back();history.back();'class="button login__submit">
 				<span class="button__text">
 			<?php
 				if(isset($getTime))        	
 		mysqli_query($conn, $getTime);
 		if(mysqli_affected_rows($conn))
-echo "<h1>Booked Successfully</h1><BR>On&nbsp;&nbsp;".$_POST['showd']." At :&nbsp; ".$_POST['showt'];
+echo "<h1>Booked Successfully</h1><br>For: Dr. ".$doctor." <br><BR>On&nbsp;&nbsp;".$_POST['showd']." At :&nbsp; ".$_POST['showt'];
 		else
 		 echo "<h1 >Error</h1>(Problem)"; 
 

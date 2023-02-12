@@ -18,7 +18,7 @@ document.getElementsByName("lform").submit();
 <a  href="index.php"> <img src="images/home.png" height=50px width=50px></a>
 				<div class="login__field">
 					<i class="login__icon fas fa-user"></i>
-					<input type="text"name="name" required class="login__input" placeholder="Username/Phone No(9..9)">
+					<input type="text"name="name" required class="login__input" placeholder="Phone No(9..9)/Username">
 				</div>
 				<div class="login__field">
 					<i class="login__icon fas fa-lock"></i>
