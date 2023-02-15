@@ -15,7 +15,6 @@ function displayf1(d){
   document.getElementsByClassName("left")[0].style.padding="40px";
   document.getElementsByClassName("left")[0].classList.remove('left');*/
 
-
 }
 function displayf2(d){d.style.display="none";
   document.getElementById("formRegisterInRegist.Page1").style.display="block";

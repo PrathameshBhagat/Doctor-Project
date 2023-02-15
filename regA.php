@@ -32,8 +32,12 @@ hearder("Location: index.php",TRUE,301);
 					<span class="button__text">
 <?php
 	if(isset($ins))
-              if($ins)
-        	echo "<h1>Registered Successfully</h1>";
+              if($ins){
+        	echo "<h1>Registered Successfully </h1>"." as Dr ".$_POST["namea"];
+        	echo "<script>var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'm.php?txt=Appointment Booking&sub=Appointment Booking Confirmed for 
+  Dr.".$doctor." on ".$_POST['showd']." At ".$_POST['showt']."');
+  xhr.send();</script>";}
 	else echo "<h1>Error</h1>(Problem)"; 
 else echo "<h1>Error</h1>(Problem)"; 
 

@@ -107,7 +107,10 @@ if(document.getElementsByName("showt")[0].value=="")
               <label><b>At :</b> </label>&nbsp;
                   <input type="show" name="showt" readonly style="background:#4d6d09;font-size: 1.5rem;width:150px"><br><br>
 
-               <?php if (isset($_POST['phn']))echo "<input type=hidden name='shown' value=".$_POST['phn'].">";?>  
+               <?php if (isset($_POST['ID']))echo "<input type=hidden name='showid' value=".$_POST['ID'].">";
+               if (isset($_POST['FirstName']))echo "<input type=hidden name='FirstName' value=".$_POST['FirstName'].">";
+
+               ?>  
 
 
 

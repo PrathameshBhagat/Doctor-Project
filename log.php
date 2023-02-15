@@ -6,7 +6,7 @@ $exist=0;
 $insert = "SELECT * FROM patient where  Phone='$name' AND Password='$password'";
 $insert1 = "SELECT * FROM doctor where  Phone='$name' AND Password='$password'";
 $insert2="SELECT * FROM patient"; 
-$insert3="UPDATE patient SET Doctor = NULL, Time = NULL,Slot=NULL WHERE FirstName = ";
+$insert3="UPDATE patient SET Doctor = NULL, Time = NULL,Slot=NULL WHERE ID = ";
 // to know the no of current users to provide to admin for notification
 $ins = mysqli_query($conn, $insert);/* to check if user exist*/
 $admin=0;
@@ -78,7 +78,7 @@ if ($row['Doctor']=="0"){
 					<span class='button__text'>&nbsp;&nbsp;RE-Book a new Slot Now</span>
 					<i class='button__icon fas fa-chevron-right'></i>
 				</a>";
-				$insert3=$insert3.'\''.$row["FirstName"].'\'';
+				$insert3=$insert3.'\''.$row["ID"].'\'';
 				 mysqli_query($conn, $insert3);
 }
 else
@@ -114,5 +114,5 @@ else echo "<div class='button login__submit'>
 	</div>
 </div>
 <form method="post" id="book" action="bookings.php">  
-	<?php echo "<input type='hidden' name='phn' value='".$row['Phone']."'>"
+	<?php echo "<input type='hidden' name='ID' value='".$row['ID']."'>";echo "<input type='hidden' name='FirstName' value='".$row['FirstName']."'>";
 	?></form></body></html>

@@ -7,13 +7,19 @@
 	button{width: 50px;background: blue;cursor: pointer;border-radius: 5px;}
 	i button  {background:red}
 	h1{display: inline-block;color: Black;}
-</style>
-
+</style><?php echo 
+"<script>
+	function rep(){
+if(document.getElementById('month').value!=0)
+	window.location.href='rep.php?dname=".$_GET['name']."&m='+document.getElementById('month').value;
+	}
+</script>"?>
 </head>
 <body >
 
-<a  href="index.php"> <img src="images/home.png" height=50px width=50px style="margin: 40px 40px 00px 40px;"><h1>Bookings: </h1></a><!-- Cancle booking from <input type='date' name='cancledaystart'>to <input type='date' name='cancledayend'>
- -->
+<a  href="index.php"> <img src="images/home.png" height=50px width=50px style="margin: 40px 40px 00px 40px;"><h1>Choose Month for Report: </h1></a><select id=month onchange="rep()">
+	<option value="0">Selectmonth </option><option value="1">January</option><option  value="2">February</option><option  value="3">March</option><option  value="4">Apri</option><option  value="5">May</option><option  value="6">June</option><option  value="7">July</option  ><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option>
+</select><h1> &nbsp;&nbsp;&nbsp;&nbsp;Bookings: </h1>
 <div class=container>
 <table border=1px>
 	<thead><TH>FirstName</TH>
@@ -29,7 +35,7 @@
 	<?php	
  include "conn.php";
  $nameofdr=$_GET['name'];
-$QUsers="SELECT * FROM patient where Doctor='$nameofdr'";
+$QUsers="SELECT * FROM patient where ID=any(SELECT ID from Bookings where Doctor ='$nameofdr' )";
 			$RmUsers	=mysqli_query($conn,$QUsers);
 			while($row=mysqli_fetch_assoc($RmUsers))
 			{ 
@@ -41,9 +47,9 @@ $QUsers="SELECT * FROM patient where Doctor='$nameofdr'";
 			<td><?php echo $row['Phone'];?></td>
 			<td><?php echo $row['Age'];?></td>
 			<td><?php echo date('d-m-Y', strtotime($row['Slot'])); ;?></td>
-			<td><?php echo $row['Time'];?></td>			
-			<td><?php echo "<button onclick=can(".'\''.$row['FirstName'].'\''.")>"."<b>Cancle</b>"."</button>";?></td>
-			<td><?php echo "<i><button onclick=del(".'\''.$row['FirstName'].'\''.")>"."<b>Delete</b>"."</button><i>";?></td>
+			<td><?php echo $row['Time'];?></td>
+			<td><?php echo "<button onclick=can(".'\''.$row['ID'].'\''.")>"."<b>Cancle</b>"."</button>";?></td>
+			<td><?php echo "<i><button onclick=del(".'\''.$row['ID'].'\''.")>"."<b>Delete</b>"."</button><i>";?></td>
 		</tr>
           
           <?php
@@ -56,7 +62,7 @@ $QUsers="SELECT * FROM patient where Doctor='$nameofdr'";
 	function can(n)
 	{
 		var xhr = new XMLHttpRequest();var resp="";
-  xhr.open("GET", "a.php?pname="+n);
+  xhr.open("GET", "a.php?pid="+n);
   xhr.onload = function () {
     alert(this.response);
   location.reload();
@@ -67,7 +73,7 @@ $QUsers="SELECT * FROM patient where Doctor='$nameofdr'";
 	{
 		if(confirm("Do You really want to delete the data of "+n+" Completely ?")){
 		var xhr = new XMLHttpRequest();var resp="";
-  xhr.open("GET", "a.php?delname="+n);
+  xhr.open("GET", "a.php?delid="+n);
   xhr.onload = function () {
     alert(this.response);
   location.reload();
@@ -75,5 +81,4 @@ $QUsers="SELECT * FROM patient where Doctor='$nameofdr'";
   xhr.send();
 	}else return;
 }
-	
 </script>
