@@ -4,6 +4,14 @@
 <link rel="stylesheet" href="css/register.css">
 
 <script>
+  function pppproblem(){
+  var problem=prompt("Please explain the medical issues you are facing ");
+  if (problem==null||problem==""){alert("Please provide proper information"); location.reload();}
+  else {var z=
+    document.getElementById("bk").innerHTML;
+    document.getElementById("bk").innerHTML=
+    z+"<Select STYLE='display:none'NAME=problems><OPTION>"+problem+"</OPTION>";}
+}    
 function checkU(){
   var xhr = new XMLHttpRequest();var resp="";
   xhr.open("GET", "checkbokk.php?date="+document.getElementsByName("date")[0].value+"&doctor="+document.getElementsByName("doctor")[0].value);
@@ -24,7 +32,7 @@ function inactivate(s){
 }
 }//add to bodu load
 function setdate(){
-   today = new Date();
+  today = new Date();
   var dd = today.getDate();
   var mm = today.getMonth()+1; //As January is 0.
   var yyyy = today.getFullYear();
@@ -35,6 +43,7 @@ function setdate(){
   if(dd<10) dd='0'+dd;
   if(mm<10) mm='0'+mm;
   document.getElementsByName("date")[0].max=yyyy+'-'+mm+'-'+dd;
+pppproblem();
 }//add to bodu load
  
 
@@ -66,8 +75,8 @@ if(document.getElementsByName("showt")[0].value=="")
     <h1 name="de">Booking an Appointment :</h1>
 <form id="bk" onsubmit="sub(event)" action="bookP.php" method="post">   
               
-   Doctor's Name :&nbsp;<select name=doctor onchange="chdate()" required></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Of Appointment :&nbsp;&nbsp;&nbsp;&nbsp; <input type="date"  name="date"  style="margin-bottom:15px" onchange="chdate()" required />
-          <br>Time Slots Available (All slots are of 15 mins) :  <p>   
+  Doctor's Name :&nbsp;<select name=doctor onchange="chdate()" required></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Of Appointment :&nbsp;&nbsp;&nbsp;&nbsp; <input type="date"  name="date"  style="margin-bottom:15px" onchange="chdate()" required />
+  <br>Time Slots Available (All slots are of 15 mins) :  <p>   
                 <input type="button"  onClick="no(this)" name="09a" value="9:00" />
                 <input type="button"  onClick="no(this)" name="09b" value="9:15" />
                 <input type="button"  onClick="no(this)" name="09c"value="9:30" />

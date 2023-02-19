@@ -11,8 +11,16 @@ if(isset($_GET['delid']))
 
 if(isset($_GET['pid']))
 {$n=$_GET['pid'];
-	$updUsers="Delete FRom bookings  WHERE ID = '$n'";
-		$mxmakmxs=mysqli_query($conn,$updUsers);		
+	$updUsers="UPDATE bookings SET Doctor=0,Slot=null,Time=null WHERE ID = '$n'";
+		$mxmakmxs=mysqli_query($conn,$updUsers);	
 		if(mysqli_affected_rows($conn))echo '! Deleted the boooking for the user with id = '.$n;
+}
+if(isset($_GET['ppid'])&&isset($_GET['pres']))
+{ $n=$_GET['ppid'];$pres=$_GET['pres'];
+ if($pres=="") echo "Please give proper prescription";
+	
+	else {$updUsers="UPDATE bookings SET 	Prescription='$pres' WHERE ID = ".$n;
+		$mxmakmxs=mysqli_query($conn,$updUsers);	
+		if(mysqli_affected_rows($conn))echo '! Prescribed the user with id = '.$n." a prescription of ".$pres ;}
 }
 ?>

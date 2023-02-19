@@ -4,8 +4,9 @@ $id= $_POST["showid"];
 $date= $_POST["showd"];
 $time= $_POST["showt"];
 $doctor=$_POST['doctor'];
+$problem=$_POST['problems'];$problem=str_replace(" ","_",$problem);
 $FirstName=$_POST['FirstName'];
-$getTime = "REPLACE into bookings (ID, FirstName,Doctor, Slot,Time) values ('$id','$FirstName','$doctor','$date','$time')";
+$getTime = "REPLACE into bookings (ID, FirstName,Doctor, Slot,Time,Problem) values ('$id','$FirstName','$doctor','$date','$time','$problem')";
 ?>
 <head>
 <link rel="stylesheet" href="css/main.css">

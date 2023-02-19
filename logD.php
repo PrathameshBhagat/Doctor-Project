@@ -4,8 +4,8 @@
 <head>
 <link rel="stylesheet" href="css/main.css">
 <style>
-	button{width: 50px;background: blue;cursor: pointer;border-radius: 5px;}
-	i button  {background:red}
+	button{width: 50px;background: lightgreen;cursor: pointer;border-radius: 5px;}
+	i button  {background:red}i b button  {background:blue;}
 	h1{display: inline-block;color: Black;}
 </style><?php echo 
 "<script>
@@ -29,13 +29,12 @@ if(document.getElementById('month').value!=0)
 		<TH>Age</TH>
 		<TH>Slot</TH>
 		<TH>Time</TH>
-		<TH>Cancle</TH>
-		<TH>Delete</TH>
+		<TH>Operations</TH>
 	</thead>
 	<?php	
  include "conn.php";
  $nameofdr=$_GET['name'];
-$QUsers="SELECT * FROM patient where ID=any(SELECT ID from Bookings where Doctor ='$nameofdr' )";
+$QUsers ="SELECT patient.FirstName,patient.ID,LastName,Gender,Phone,Age,Slot,Time,Problem FROM patient RIGHT JOIN bookings ON patient.id = bookings.id  where Doctor ='$nameofdr' ";
 			$RmUsers	=mysqli_query($conn,$QUsers);
 			while($row=mysqli_fetch_assoc($RmUsers))
 			{ 
@@ -48,8 +47,9 @@ $QUsers="SELECT * FROM patient where ID=any(SELECT ID from Bookings where Doctor
 			<td><?php echo $row['Age'];?></td>
 			<td><?php echo date('d-m-Y', strtotime($row['Slot'])); ;?></td>
 			<td><?php echo $row['Time'];?></td>
-			<td><?php echo "<button onclick=can(".'\''.$row['ID'].'\''.")>"."<b>Cancle</b>"."</button>";?></td>
-			<td><?php echo "<i><button onclick=del(".'\''.$row['ID'].'\''.")>"."<b>Delete</b>"."</button><i>";?></td>
+			<td style="padding:5px"><?php echo "<button onclick=can(".'\''.$row['ID'].'\''.")>"."<b>Cancle</b>"."</button>";?>&nbsp;&nbsp;
+			<?php echo "<i><button onclick=del(".'\''.$row['ID'].'\''.")>"."<b>Delete</b>"."</button><i>";?></br>
+			<?php echo "<i><b><button style='width :70px;margin:5px;'onclick=pres(".'\''.$row['ID'].'\''.",".'\''.$row['Problem'].'\''.")>"."<b>Prescibe</b>"."</button></b><i>";?></td>
 		</tr>
           
           <?php
@@ -80,5 +80,17 @@ $QUsers="SELECT * FROM patient where ID=any(SELECT ID from Bookings where Doctor
   };
   xhr.send();
 	}else return;
+}
+function pres(n,p){
+	if(p!=""||p!=null)var pres =prompt("Please Prescribe the patient for "+p);
+	else var pres =prompt("Please Prescribe the Prescription");
+	if (pres==""||pres==null){alert("Please give proper Prescription"); location.reload();}
+	var xhr = new XMLHttpRequest();var resp="";
+  xhr.open("GET", "a.php?ppid="+n+"&pres="+pres);
+  xhr.onload = function () {
+    alert(this.response);
+  location.reload();
+  };
+  xhr.send();
 }
 </script>

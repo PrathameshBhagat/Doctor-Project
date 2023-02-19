@@ -5,16 +5,15 @@ $password= $_POST["password"];
 $exist=0;
 $insert = "SELECT * FROM patient where  Phone='$name' AND Password='$password'";
 $insert1 = "SELECT * FROM doctor where  Phone='$name' AND Password='$password'";
-$insert2="SELECT * FROM patient"; 
-$insert3="UPDATE patient SET Doctor = NULL, Time = NULL,Slot=NULL WHERE ID = ";
-// to know the no of current users to provide to admin for notification
+$insert3="Delete from bookings  WHERE ID = ";
+//this is to remove cancellation from table
+
 $ins = mysqli_query($conn, $insert);/* to check if user exist*/
-$admin=0;
+
 $ins1 = mysqli_query($conn, $insert1);/* to check if admin exist*/
-$s="SELECT Name FROM user";
-$row="";
-$sel=mysqli_query($conn, $s);/* to collect all users to show to admin*/
-$user=mysqli_query($conn,$insert2);
+
+$row="";//will contain either a patient or a doctor row 
+ 
  
 ?>
 <html>
@@ -43,10 +42,11 @@ $user=mysqli_query($conn,$insert2);
 		if(mysqli_num_rows($ins)>0)
 		{
 		echo "Hi User<H1> ";
-		$row=mysqli_fetch_assoc($ins);
+		$row=mysqli_fetch_assoc($ins);//fetch patient name
 		echo $row["FirstName"];
 		echo "</H1>";
 		echo "(Logged in successfully)";
+
 		$exist=1;
 		}
 
@@ -61,8 +61,6 @@ $user=mysqli_query($conn,$insert2);
 		
 	}
 	?>
-	
-	
 
 
 
@@ -70,32 +68,66 @@ $user=mysqli_query($conn,$insert2);
 					<i class="button__icon fas fa-chevron-right"></i>
 				</a>
 <?php 
-if ($row['Doctor']=="0"){
-	echo "<div class='button login__submit'>
-					<span class='button__text'><H1>Slot Cancled </h1>by the admin due to some reason</span>
-					<i class='button__icon fas fa-chevron-right'></i>
-				</div><a onclick='book.submit()' class='button login__submit'>
-					<span class='button__text'>&nbsp;&nbsp;RE-Book a new Slot Now</span>
-					<i class='button__icon fas fa-chevron-right'></i>
-				</a>";
-				$insert3=$insert3.'\''.$row["ID"].'\'';
-				 mysqli_query($conn, $insert3);
-}
-else
-if ($row['Slot']==""||$row["Time"]==""||$row['Slot']==null||$row["Time"]==null){
-	if ($exist==1)echo "<a onclick='book.submit()' class='button login__submit'>
-					<span class='button__text'>Book Slot Now</span>
-					<i class='button__icon fas fa-chevron-right'></i>
-				</a>	";}
-else echo "<div class='button login__submit'>
-					<span class='button__text'><H1>Slot Booked Already </h1><br>dr.&nbsp;&nbsp;".$row['Doctor']."<br>On: ".$row['Slot'].", At : ".$row["Time"]."</span>
-					<i class='button__icon fas fa-chevron-right'></i>
-				</div>
-<a onclick='book.submit()' class='button login__submit'>
-					<span class='button__text'>Click to Change Booking </span>
-					<i class='button__icon fas fa-chevron-right'></i>
-				</a>";
+//if(mysqli_num_rows($rows)>0){$rows=mysqli_fetch_assoc($insert2);
 
+if($exist=1)	
+{
+	$insert2="SELECT * FROM bookings where  ID=".$row["ID"]; //fetch booking for later use
+	$rows=mysqli_query($conn,$insert2);
+
+	if (mysqli_num_rows($rows)==0&&(mysqli_num_rows($ins)>0||mysqli_num_rows($ins1)>0))
+			echo "<a onclick='book.submit()' class='button login__submit'>
+							<span class='button__text'>Book Slot Now</span>
+							<i class='button__icon fas fa-chevron-right'></i>
+						</a>	";
+	else 
+		{
+
+		$bokdetails=mysqli_fetch_assoc($rows);
+		if ($bokdetails['Doctor']=="0"){
+			echo "<div class='button login__submit'>
+							<span class='button__text'><H1>Slot Cancled </h1>by the doctor due to some reason</span>
+							<i class='button__icon fas fa-chevron-right'></i>
+						</div><a onclick='book.submit()' class='button login__submit'>
+							<span class='button__text'>&nbsp;&nbsp;Re-Book a new Slot Now</span>
+							<i class='button__icon fas fa-chevron-right'></i>
+						</a>";
+						$insert3=$insert3.'\''.$bokdetails["ID"].'\'';
+						 mysqli_query($conn, $insert3);
+						 //delete record from bookings as the patient has been informed about cancellation
+		}
+		else {
+			if($bokdetails['Doctor']!="0"&&$bokdetails['Doctor']!=null&&$bokdetails['Prescription']==null) 
+				
+				echo "<div class='button login__submit'>
+								<span class='button__text'><H1>Slot Booked Already </h1><br>dr.&nbsp;&nbsp;".$bokdetails['Doctor']."<br>On: ".$bokdetails['Slot'].", At : ".$bokdetails["Time"]."</span>
+								<i class='button__icon fas fa-chevron-right'></i>
+							</div>
+			<a onclick='book.submit()' class='button login__submit'>
+								<span class='button__text'>Click to Change Booking </span>
+								<i class='button__icon fas fa-chevron-right'></i>
+								</a>";
+				else 
+			{echo "<div class='button login__submit'>
+								<span class='button__text'><H1>Dr. ".$bokdetails['Doctor']." Prescribed </h1><br> you : <b>".$bokdetails["Prescription"]."</b></span>
+								<i class='button__icon fas fa-chevron-right'></i>
+							</div>
+			<a onclick='book.submit()' class='button login__submit'>
+								<span class='button__text'>Click to Book Again </span>
+								<i class='button__icon fas fa-chevron-right'></i>
+								</a>";
+								$insert3=$insert3.'\''.$bokdetails["ID"].'\'';
+						 mysqli_query($conn, $insert3);
+						 //delete record from bookings as the patient has been informed about cancellation
+
+							}
+
+		}
+
+		}						
+}
+
+	
 ?>
 
 
