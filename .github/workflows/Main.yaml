@@ -30,4 +30,4 @@ jobs:
 
         password: ${{ secrets.PASS }}
 
-        server-dir : /public_html/docs/docs/
+        server-dir : /public_html/Doctor/
